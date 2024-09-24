@@ -9,6 +9,13 @@ class Customer extends Model
 {
     use HasFactory;
 
-    protected $table= customers;
+    protected $table= 'customers';
+
+    protected $primaryKey = 'customer_id';
+    public $timestamps = false;
+
+    public function isGoldMember(){
+        return $this->points > 2000;
+    }
     
 }
