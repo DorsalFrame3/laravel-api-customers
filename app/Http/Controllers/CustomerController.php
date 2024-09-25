@@ -41,12 +41,26 @@ class CustomerController extends Controller
     }
 
     public function show(Customer $customer){
-        return [
-            'customer_id' => $customer->customer_id,
-            'first_name' => $customer->first_name,
-            'last_name' => $customer->last_name,
-            'isGoldMember' => $customer->isGoldMember()  
-        ];
+        // return $customer;
+            $result = DB::table('customers as c')
+            ->join('orders as o', 'c.customer_id', '=', 'o.customer_id')
+            ->join('order_statuses as os', 'o.status', '=', 'os.order_status_id')
+            ->select(
+                        'c.customer_id',
+                        'c.first_name',
+                        'c.last_name',
+                        'c.address',
+                        'c.city',
+                        'c.state',
+                        'c.points',
+                        'o.order_date',
+                        'os.name as order_status_name'
+                    )
+            ->where('c.customer_id', $customer->customer_id)
+            ->get();
+
+            return $result;
+           
     }
 
     public function update(Request $request, Customer $customer){
