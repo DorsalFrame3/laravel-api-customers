@@ -30,7 +30,7 @@ class CustomerController extends Controller
     }
 
     public function store(Request $request){
-        $request->validate([
+        $fields = $request->validate([
             'first_name'=>'required',
             'last_name'=>'required',
             'address'=>'required',
@@ -38,10 +38,10 @@ class CustomerController extends Controller
             'state'=>'required',
             'points'
         ]);
+        Customer::create($fields);
     }
 
     public function show(Customer $customer){
-        // return $customer;
             $result = DB::table('customers as c')
             ->join('orders as o', 'c.customer_id', '=', 'o.customer_id')
             ->join('order_statuses as os', 'o.status', '=', 'os.order_status_id')
